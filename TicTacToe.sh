@@ -1,4 +1,4 @@
-#!/bin/bash -x
+#!/bin/bash 
 echo "..........WELCOME TO TIC-TAC-TOE.................."
 
 declare -a board
@@ -15,4 +15,12 @@ function displayBoard() {
 	done
 }
 
+function playerName() {
+	user="X"
+	computer="O"
+	echo "user=X"
+	echo "computer=O"
+}
+
+playerName
 displayBoard
