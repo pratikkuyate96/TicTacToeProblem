@@ -16,11 +16,26 @@ function displayBoard() {
 }
 
 function playerName() {
-	user="X"
-	computer="O"
-	echo "user=X"
-	echo "computer=O"
+	if [[ $((RANDOM%2)) -eq 0 ]]
+	then
+		user="X"
+		computer="O"
+	else
+		computer="X"
+		user="O"
+	fi
+	echo "user=$user"
+	echo "computer=$computer"
 }
 
+function whoPlayFirst() {
+	if [[ $((RANDOM%2)) -eq 0 ]]
+	then
+		player="user"
+	else
+		player="computer"
+	fi
+}
 playerName
+whoPlayFirst
 displayBoard
