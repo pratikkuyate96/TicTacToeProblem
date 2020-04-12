@@ -35,6 +35,7 @@ function whoPlayFirst() {
 	else
 		player="computer"
 	fi
+	echo "$currentPlayer"
 }
 playerName
 whoPlayFirst
