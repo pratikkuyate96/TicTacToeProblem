@@ -1,9 +1,9 @@
-#!/bin/bash -x
+#!/bin/bash
 echo "..........WELCOME TO TIC-TAC-TOE.................."
 
 declare -a board
-turnCounr=0
-MAX_TURBS=9
+turnCount=0
+MAX_TURNS=9
 user=""
 computer=""
 curretntPlayer=""
@@ -53,7 +53,7 @@ function winner() {
          [[ ${board[$column]} == ${board[$column+3]} && ${board[$column+3]} ==  ${board[$column+6]} ]] || 
          [[ ${board[$diagonal]} == ${board[$diagonal+4]} && ${board[$diagonal+4]} == ${board[$diagonal+8]} ]] ||
          [[ ${board[$diagonal+2]} == ${board[$diagonal+4]} && ${board[$diagonal+4]} == ${board[$diagonal+6]} ]]
-      then  
+      then
          echo "winner=$currentPlayer"
          echo ""
          exit
