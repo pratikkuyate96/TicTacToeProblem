@@ -189,6 +189,18 @@ function checkCenter() {
 	fi
 }
 
+function checkSides() {
+	for((i=0;i<8;i=i+2))
+	do
+		if [[ ${board[$i]} -eq $((i+1)) ]]
+		then
+			board[$i]=$computer
+			noMove=1
+			checkConditions
+		fi
+	done
+}
+
 function checkConditions(){
 	displayBoard
 	flag=1
