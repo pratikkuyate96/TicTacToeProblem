@@ -1,5 +1,6 @@
 #!/bin/bash
-echo "..........WELCOME TO TIC-TAC-TOE.................."
+
+echo "............WELCOME TO TIC TAC TOE............"
 
 declare -a board
 turnCount=0
@@ -7,8 +8,7 @@ MAX_TURNS=9
 user=""
 computer=""
 curretntPlayer=""
-board=( 1 2 3 4 5 6 7 8)
-
+board=(1 2 3 4 5 6 7 8)
 
 function displayBoard() {
 	for (( row=0; row<=6; row=row+3 ))
@@ -116,7 +116,7 @@ function computerPlay() {
 		exit
 	fi
 }
-
+#Function calling
 playerName
 toss
 displayBoard
