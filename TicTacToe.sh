@@ -44,7 +44,6 @@ function toss() {
 	echo "$currentPlayer"
 }
 
-#Function check play to corners
 function winner() {
    diagonal=0
    column=0
@@ -61,6 +60,139 @@ function winner() {
       fi
       column=$((column+1))
    done
+}
+
+function winBlockCondition() {
+	local symbol=$1
+	if [ $flag -eq 0 ]
+	then 
+		computerRowWin $symbol
+	fi
+	if [ $flag -eq 0 ]
+	then
+		computerColumnWin $symbol
+	fi
+	if [ $flag -eq 0 ]
+	then
+		computerDiagonalWin $symbol
+	fi
+}
+
+function computerRowWin() {
+	local symbol=$1
+	for((row=0;row<9;row=row+3))
+	do
+   		if [[ ${board[$row]} == $symbol && ${board[$row+1]} == $symbol && ${board[$row+2]} == $((row+2)) ]]
+   		then
+				board[$row+2]=$computer
+				noMove=1
+				checkConditions
+   		elif [[ ${board[$row]} == $symbol && ${board[$row+2]} == $symbol && ${board[$row+1]} == $((row+1)) ]]
+			then
+        		board[$row+1]=$computer
+        		noMove=1
+				checkConditions
+   		elif [[ ${board[$row+1]} == $symbol && ${board[$row+2]} == $symbol && ${board[$row]} == $row ]]
+   		then
+        		board[$row]=$computer
+        		noMove=1
+        		checkConditions
+   		fi
+	done
+}
+
+function computerColumnWin() {
+	local symbol=$1
+	for((column=0;column<7;column=column+1))
+	do
+	 	if [[ ${board[$column]} == $symbol && ${board[$column+3]} == $symbol && ${board[$column+6]} == $((column+6)) ]]
+		then
+			board[$column+6]=$computer
+			noMove=1
+			checkConditions
+		elif [[ ${board[$column]} == $symbol && ${board[$column+6]} == $symbol && ${board[$column+3]} == $((column+3)) ]]
+		then
+			board[$column+3]=$computer
+			noMove=1
+			checkConditions
+		elif [[ ${board[$column+3]} == $symbol && ${board[$column+6]} == $symbol && ${board[$column]} == $column ]]
+		then
+			board[$column]=$computer
+			noMove=1
+			checkConditions
+		fi
+	done
+}
+
+function computerDiagonalWin(){
+	local symbol=$1
+	diagonal=0
+	if [[ ${board[$diagonal+2]} == $symbol && ${board[$diagonal+4]} == $symbol && ${board[$diagonal+6]} == $((diagonal+6)) ]]
+	then
+     		board[$diagonal+6]=$computer
+     		noMove=1
+			checkConditions
+   	elif [[ ${board[$diagonal+2]} == $symbol && ${board[$diagonal+6]} == $symbol && ${board[$diagonal+4]} == $((diagonal+4)) ]]
+   	then
+			board[$diagonal+4]=$computer
+			noMove=1
+			checkConditions
+   	elif [[ ${board[$diagonal+4]} == $symbol && ${board[$diagonal+6]} == $symbol && ${board[$diagonal+2]} == $((diagonal+2)) ]]
+   	then
+			board[$diagonal+2]=$computer
+			noMove=1
+			checkConditions
+   	elif [[ ${board[$diagonal]} == $symbol && ${board[$diagonal+4]} == $symbol && ${board[$diagonal+8]} == $((diagonal+8)) ]]
+   	then
+			board[$diagonal+8]=$computer
+			noMove=1
+			checkConditions
+   	elif [[ ${board[$diagonal]} == $symbol && ${board[$diagonal+8]} == $symbol && ${board[$diagonal+4]} == $((diagonal+4)) ]]
+   	then
+			board[$diagonal+4]=$computer
+			noMove=1
+			checkConditions
+   	elif [[ ${board[$diagonal+4]} == $symbol && ${board[$diagonal+8]} == $symbol && ${board[$diagonal]} == $diagonal ]]
+   	then
+			board[$diagonal]=$computer
+			noMove=1
+			checkConditions
+   	fi
+}
+
+function checkCorner() {
+	for((i=0;i<7;i=i+6))
+	do
+		if [[ ${board[$i]} == $i ]]
+		then
+			board[$i]=$computer
+			noMove=1
+			checkConditions
+			break
+		elif [[ ${board[$i+2]} == $((i+2)) ]]
+		then
+			board[$i+2]=$computer
+			noMove=1
+			checkConditions
+			break
+		fi
+	done
+}
+
+function checkCenter() {
+	i=0
+	if [[ ${board[$i+4]} -eq $((i+5)) ]]
+	then
+		board[$i+4]=$computer
+		noMove=1
+		checkConditions
+	fi
+}
+
+function checkConditions(){
+	displayBoard
+	flag=1
+	((turnCount++))
 }
 
 function play(){
