@@ -44,6 +44,7 @@ function toss() {
 	echo "$currentPlayer"
 }
 
+#Function check play to corners
 function winner() {
    diagonal=0
    column=0
@@ -116,6 +117,7 @@ function computerPlay() {
 		exit
 	fi
 }
+
 #Function calling
 playerName
 toss
