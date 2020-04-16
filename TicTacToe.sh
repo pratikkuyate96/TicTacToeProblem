@@ -1,24 +1,21 @@
 #!/bin/bash
+clear
 
-echo "............WELCOME TO TIC TAC TOE............"
-
-declare -a board
-turnCount=0
-MAX_TURNS=9
-user=""
-computer=""
-curretntPlayer=""
-board=(1 2 3 4 5 6 7 8)
+function resetBoard() {
+	echo "********** New game starts **********"
+	board=(0 1 2 3 4 5 6 7 8)
+}
 
 function displayBoard() {
 	for (( row=0; row<=6; row=row+3 ))
 	do
-		echo "${board[$row]} | ${board[$row+1]} | ${board[$row+2]}"
-		if [ $row -lt 6 ]
-		then
-		echo "----------"
-		fi
+		echo " ${board[$row]} | ${board[$row+1]} | ${board[$row+2]}"
+	if [ $row -lt 6 ]
+	then
+		echo "---*---*---"
+	fi
 	done
+		echo ""
 }
 
 function playerName() {
@@ -30,8 +27,7 @@ function playerName() {
 		computer="X"
 		user="O"
 	fi
-	echo "user=$user"
-	echo "computer=$computer"
+	echo "user will play with $user and computer will play with $computer"
 }
 
 function toss() {
@@ -41,10 +37,10 @@ function toss() {
 	else
 		currentPlayer="computer"
 	fi
-	echo "$currentPlayer"
+	echo "$currentPlayer will start the game!"
 }
 
-function winner() {
+function winChecker() {
    diagonal=0
    column=0
    for((row=0;row<9;row=row+3))
@@ -53,10 +49,10 @@ function winner() {
          [[ ${board[$column]} == ${board[$column+3]} && ${board[$column+3]} ==  ${board[$column+6]} ]] || 
          [[ ${board[$diagonal]} == ${board[$diagonal+4]} && ${board[$diagonal+4]} == ${board[$diagonal+8]} ]] ||
          [[ ${board[$diagonal+2]} == ${board[$diagonal+4]} && ${board[$diagonal+4]} == ${board[$diagonal+6]} ]]
-      then
-         echo "winner=$currentPlayer"
+      then  
+         echo "$currentPlayer Wins!!"
          echo ""
-         exit
+         main
       fi
       column=$((column+1))
    done
@@ -65,7 +61,7 @@ function winner() {
 function winBlockCondition() {
 	local symbol=$1
 	if [ $flag -eq 0 ]
-	then 
+	then
 		computerRowWin $symbol
 	fi
 	if [ $flag -eq 0 ]
@@ -105,7 +101,7 @@ function computerColumnWin() {
 	local symbol=$1
 	for((column=0;column<7;column=column+1))
 	do
-	 	if [[ ${board[$column]} == $symbol && ${board[$column+3]} == $symbol && ${board[$column+6]} == $((column+6)) ]]
+		if [[ ${board[$column]} == $symbol && ${board[$column+3]} == $symbol && ${board[$column+6]} == $((column+6)) ]]
 		then
 			board[$column+6]=$computer
 			noMove=1
@@ -124,7 +120,7 @@ function computerColumnWin() {
 	done
 }
 
-function computerDiagonalWin(){
+function computerDiagonalWin() {
 	local symbol=$1
 	diagonal=0
 	if [[ ${board[$diagonal+2]} == $symbol && ${board[$diagonal+4]} == $symbol && ${board[$diagonal+6]} == $((diagonal+6)) ]]
@@ -201,13 +197,13 @@ function checkSides() {
 	done
 }
 
-function checkConditions(){
+function checkConditions() {
 	displayBoard
 	flag=1
 	((turnCount++))
 }
 
-function play(){
+function play() {
 	if [[ "$currentPlayer" = "user" ]]
 	then
 		userPlay
@@ -220,14 +216,14 @@ function userPlay() {
 	currentPlayer="user"
 	if [[ $turnCount -lt $MAX_TURNS ]]
 	then
-		read -p "Enter position between 0 to 8: " position
+		read -p "Choose your position between 0 to 8: " position
 		if [[ "${board[$position]}" = "$position" ]]
 		then
 			board[$position]=$user	
 			((turnCount++))
 			displayBoard
 		else
-			echo "wrong input, please enter  between 0 to 8"
+			echo "Invalid position, please enter valid position between 0 to 8"
 			userPlay
 		fi
 		winner
@@ -235,35 +231,64 @@ function userPlay() {
 	else
 		echo "Game tie !!"
 		echo ""
-		exit
+		main
 	fi
 }
 
 function computerPlay() {
 	currentPlayer="computer"
+	flag=0
+	noMove=0
 	if [[ $turnCount -lt $MAX_TURNS ]]
 	then
-		position=$((RANDOM%9))
-		if [[ "${board[$position]}" = "$position" ]]
+		winBlockCondition $computer
+		winBlockCondition $user
+
+		if [[ flag -eq 0 ]]
 		then
-			echo "computer's turn:"
-			board[$position]=$computer
-			((turnCount++))
-			displayBoard
-		else
-			computerPlay
+			checkCorner
 		fi
-		winner
-		userPlay
+
+		if [[ flag -eq 0 ]]
+		then
+			checkCenter
+		fi
+
+		if [ $flag -eq 0 ]
+		then
+			checkSides
+		fi
+			winner
+			userPlay
 	else
 		echo "Game tie !!"
 		echo ""
-		exit
+		main
 	fi
 }
 
-#Function calling
-playerName
-toss
-displayBoard
-play
+function main() {
+	read -p "Do you want to start a game? enter 'y' for yes or anything else for no: " choice
+	if [[ $choice = "y" || $choice = "Y" ]]
+	then
+		clear
+		declare -a board
+
+		turnCount=0
+		MAX_TURNS=9
+		flag=1
+		user=""
+		computer=""
+		currentPlayer=""
+
+		resetBoard
+		playerName
+		toss
+		displayBoard
+		play
+	else
+		echo "Bye!"
+		exit
+	fi
+}
+main
