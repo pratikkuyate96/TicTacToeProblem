@@ -40,7 +40,7 @@ function toss() {
 	echo "$currentPlayer will start the game!"
 }
 
-function winChecker() {
+function winner() {
    diagonal=0
    column=0
    for((row=0;row<9;row=row+3))
@@ -81,17 +81,14 @@ function computerRowWin() {
    		if [[ ${board[$row]} == $symbol && ${board[$row+1]} == $symbol && ${board[$row+2]} == $((row+2)) ]]
    		then
 				board[$row+2]=$computer
-				noMove=1
 				checkConditions
    		elif [[ ${board[$row]} == $symbol && ${board[$row+2]} == $symbol && ${board[$row+1]} == $((row+1)) ]]
 			then
         		board[$row+1]=$computer
-        		noMove=1
 				checkConditions
    		elif [[ ${board[$row+1]} == $symbol && ${board[$row+2]} == $symbol && ${board[$row]} == $row ]]
    		then
         		board[$row]=$computer
-        		noMove=1
         		checkConditions
    		fi
 	done
@@ -104,17 +101,14 @@ function computerColumnWin() {
 		if [[ ${board[$column]} == $symbol && ${board[$column+3]} == $symbol && ${board[$column+6]} == $((column+6)) ]]
 		then
 			board[$column+6]=$computer
-			noMove=1
 			checkConditions
 		elif [[ ${board[$column]} == $symbol && ${board[$column+6]} == $symbol && ${board[$column+3]} == $((column+3)) ]]
 		then
 			board[$column+3]=$computer
-			noMove=1
 			checkConditions
 		elif [[ ${board[$column+3]} == $symbol && ${board[$column+6]} == $symbol && ${board[$column]} == $column ]]
 		then
 			board[$column]=$computer
-			noMove=1
 			checkConditions
 		fi
 	done
@@ -126,32 +120,26 @@ function computerDiagonalWin() {
 	if [[ ${board[$diagonal+2]} == $symbol && ${board[$diagonal+4]} == $symbol && ${board[$diagonal+6]} == $((diagonal+6)) ]]
 	then
      		board[$diagonal+6]=$computer
-     		noMove=1
 			checkConditions
    	elif [[ ${board[$diagonal+2]} == $symbol && ${board[$diagonal+6]} == $symbol && ${board[$diagonal+4]} == $((diagonal+4)) ]]
    	then
 			board[$diagonal+4]=$computer
-			noMove=1
 			checkConditions
    	elif [[ ${board[$diagonal+4]} == $symbol && ${board[$diagonal+6]} == $symbol && ${board[$diagonal+2]} == $((diagonal+2)) ]]
    	then
 			board[$diagonal+2]=$computer
-			noMove=1
 			checkConditions
    	elif [[ ${board[$diagonal]} == $symbol && ${board[$diagonal+4]} == $symbol && ${board[$diagonal+8]} == $((diagonal+8)) ]]
    	then
 			board[$diagonal+8]=$computer
-			noMove=1
 			checkConditions
    	elif [[ ${board[$diagonal]} == $symbol && ${board[$diagonal+8]} == $symbol && ${board[$diagonal+4]} == $((diagonal+4)) ]]
    	then
 			board[$diagonal+4]=$computer
-			noMove=1
 			checkConditions
    	elif [[ ${board[$diagonal+4]} == $symbol && ${board[$diagonal+8]} == $symbol && ${board[$diagonal]} == $diagonal ]]
    	then
 			board[$diagonal]=$computer
-			noMove=1
 			checkConditions
    	fi
 }
@@ -162,13 +150,11 @@ function checkCorner() {
 		if [[ ${board[$i]} == $i ]]
 		then
 			board[$i]=$computer
-			noMove=1
 			checkConditions
 			break
 		elif [[ ${board[$i+2]} == $((i+2)) ]]
 		then
 			board[$i+2]=$computer
-			noMove=1
 			checkConditions
 			break
 		fi
@@ -180,7 +166,6 @@ function checkCenter() {
 	if [[ ${board[$i+4]} -eq $((i+5)) ]]
 	then
 		board[$i+4]=$computer
-		noMove=1
 		checkConditions
 	fi
 }
@@ -191,7 +176,6 @@ function checkSides() {
 		if [[ ${board[$i]} -eq $((i+1)) ]]
 		then
 			board[$i]=$computer
-			noMove=1
 			checkConditions
 		fi
 	done
