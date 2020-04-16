@@ -40,7 +40,7 @@ function toss() {
 	echo "$currentPlayer will start the game!"
 }
 
-function winChecker() {
+function winner() {
    diagonal=0
    column=0
    for((row=0;row<9;row=row+3))
